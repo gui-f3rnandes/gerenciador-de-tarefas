@@ -35,26 +35,12 @@ const NAV = [
   { id: 'notas', label: 'Notas', icon: icon(<><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" /><polyline points="14 3 14 9 20 9" /><line x1="8" y1="13" x2="16" y2="13" /><line x1="8" y1="17" x2="14" y2="17" /></>) },
 ]
 
-const icon = (children) => (
-  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    {children}
-  </svg>
-)
-const NAV = [
-  { id: 'tarefas', label: 'Tarefas', icon: icon(<><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /></>) },
-  { id: 'pendencias', label: 'Pendências', icon: icon(<><polyline points="22 12 16 12 14 15 10 15 8 12 2 12" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></>) },
-  { id: 'calendario', label: 'Calendário', icon: icon(<><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></>) },
-  { id: 'notas', label: 'Notas', icon: icon(<><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" /><polyline points="14 3 14 9 20 9" /><line x1="8" y1="13" x2="16" y2="13" /><line x1="8" y1="17" x2="14" y2="17" /></>) },
-]
-
 export default function Board({ userId }) {
   const [data, setData] = useState(null)
   const [loadError, setLoadError] = useState(false)
   const [status, setStatus] = useState('saved')
   const [day, setDay] = useState(null)
   const [tab, setTab] = useState('tarefas') // página ativa no celular
-<<<<<<< Updated upstream
-=======
   const [push, setPush] = useState('checking') // lembretes deste aparelho
 
   useEffect(() => {
@@ -71,7 +57,6 @@ export default function Board({ userId }) {
       setPush('error')
     }
   }
->>>>>>> Stashed changes
   const [dark, setDark] = useState(() => document.documentElement.classList.contains('dark'))
   const stamp = useRef(null) // versão da nuvem que conhecemos
   const dirty = useRef(false) // alteração ainda não enviada
@@ -179,8 +164,6 @@ export default function Board({ userId }) {
             <span aria-live="polite" className={`mr-2 hidden text-xs sm:inline ${status === 'error' ? 'text-red-600 dark:text-red-400' : 'text-slate-400'}`}>
               {STATUS[status]}
             </span>
-<<<<<<< Updated upstream
-=======
             <span role="img" aria-label={STATUS[status]} title={STATUS[status]} className={`mr-2 h-2 w-2 rounded-full sm:hidden ${status === 'error' ? 'bg-red-500' : status === 'saving' ? 'bg-indigo-500' : 'bg-slate-300'}`} />
             {['on', 'off', 'error'].includes(push) && (
               <button
@@ -192,7 +175,6 @@ export default function Board({ userId }) {
                 {bell(push === 'on')}
               </button>
             )}
->>>>>>> Stashed changes
             <button onClick={() => setDark(!dark)} className={ghost}>
               <span className="hidden sm:inline">Modo </span>
               <span className="capitalize sm:normal-case">{dark ? 'claro' : 'escuro'}</span>
@@ -200,10 +182,7 @@ export default function Board({ userId }) {
             <button onClick={sair} className={ghost}>Sair</button>
           </div>
         </header>
-<<<<<<< Updated upstream
-=======
         {PUSH_MSG[push] && <p role="status" className="-mt-3 mb-5 text-xs text-slate-500 lg:-mt-2 lg:mb-4">{PUSH_MSG[push]}</p>}
->>>>>>> Stashed changes
 
         <div className="grid gap-8 lg:min-h-0 lg:flex-1 lg:grid-cols-[minmax(0,1fr)_19rem_19rem] lg:grid-rows-1">
           <div className={`${show('tarefas')} lg:h-full lg:min-h-0`}>
