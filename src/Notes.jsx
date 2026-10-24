@@ -6,7 +6,7 @@ export default function Notes({ value, onChange }) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Escreva aqui. Salva sozinho."
-        className="h-48 w-full resize-none bg-transparent lg:h-auto lg:min-h-0 lg:flex-1 rounded-lg border border-slate-200 p-3 text-sm outline-none placeholder:text-slate-300 focus:border-slate-800"
+        className="h-72 w-full resize-none bg-transparent lg:h-auto lg:min-h-0 lg:flex-1 rounded-lg border border-slate-200 p-4 text-base outline-none lg:p-3 lg:text-sm placeholder:text-slate-300 focus:border-slate-800"
       />
     </section>
   )

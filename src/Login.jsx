@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { supabase } from './supabase'
 
-const field = 'w-full bg-transparent border-b border-slate-300 py-2 text-sm outline-none focus:border-slate-800'
+const field = 'w-full bg-transparent border-b border-slate-300 py-2.5 text-base outline-none focus:border-slate-800'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -26,7 +26,7 @@ export default function Login() {
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 text-slate-800">
-      <form onSubmit={submit} className="w-full max-w-sm space-y-5">
+      <form onSubmit={submit} className="w-full max-w-sm space-y-6">
         <h1 className="text-2xl font-semibold tracking-tight">Tarefas</h1>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="E-mail" aria-label="E-mail" autoComplete="username" required className={field} />
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Senha" aria-label="Senha" autoComplete="current-password" required className={field} />

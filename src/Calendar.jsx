@@ -21,11 +21,11 @@ export default function Calendar({ tasks, day, onPick }) {
 
   return (
     <section className="lg:shrink-0">
-      <div className="mb-3 flex items-center justify-between">
+      <div className="mb-4 flex items-center justify-between lg:mb-3">
         <h2 className="font-medium capitalize">{label}</h2>
         <div className="flex gap-1">
-          <button onClick={() => shift(-1)} aria-label="Mês anterior" className="rounded px-2 py-1 text-slate-500 hover:bg-slate-100">‹</button>
-          <button onClick={() => shift(1)} aria-label="Próximo mês" className="rounded px-2 py-1 text-slate-500 hover:bg-slate-100">›</button>
+          <button onClick={() => shift(-1)} aria-label="Mês anterior" className="rounded px-3 py-2 text-slate-500 hover:bg-slate-100 lg:px-2 lg:py-1">‹</button>
+          <button onClick={() => shift(1)} aria-label="Próximo mês" className="rounded px-3 py-2 text-slate-500 hover:bg-slate-100 lg:px-2 lg:py-1">›</button>
         </div>
       </div>
 
@@ -34,13 +34,13 @@ export default function Calendar({ tasks, day, onPick }) {
           <span key={i} className="py-1">{w}</span>
         ))}
       </div>
-      <div className="grid grid-cols-7 gap-y-1 text-center text-sm">
+      <div className="grid grid-cols-7 gap-y-2 text-center text-sm lg:gap-y-1">
         {cells.map((c, i) =>
           c ? (
             <button
               key={c}
               onClick={() => onPick(day === c ? null : c)}
-              className={`relative mx-auto h-9 w-9 rounded-full ${
+              className={`relative mx-auto h-11 w-11 rounded-full lg:h-9 lg:w-9 ${
                 day === c ? 'bg-slate-900 text-slate-50' : c === today ? 'font-semibold ring-1 ring-slate-300' : 'hover:bg-slate-100'
               }`}
             >
@@ -56,7 +56,7 @@ export default function Calendar({ tasks, day, onPick }) {
       </div>
 
       {day && (
-        <ul className="mt-4 max-h-24 space-y-1 overflow-y-auto border-t border-slate-100 pt-3 text-sm">
+        <ul className="mt-5 max-h-40 space-y-2 overflow-y-auto lg:mt-4 lg:max-h-24 lg:space-y-1 border-t border-slate-100 pt-3 text-sm">
           {list.length === 0 && <li className="text-slate-400">Nenhuma tarefa neste dia.</li>}
           {list.map((t) => (
             <li key={t.id} className={t.done ? 'text-slate-400 line-through' : ''}>{t.title}</li>

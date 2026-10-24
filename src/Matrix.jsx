@@ -19,20 +19,20 @@ const byDue = (a, b) => {
   return `${a.due}T${a.time || '23:59'}`.localeCompare(`${b.due}T${b.time || '23:59'}`)
 }
 const blank = { title: '', desc: '', urgent: false, important: true, due: '', time: '' }
-const field = 'bg-transparent border-b border-slate-300 py-1.5 text-sm outline-none focus:border-slate-800'
+const field = 'bg-transparent border-b border-slate-300 py-2.5 text-base outline-none focus:border-slate-800 lg:py-1.5 lg:text-sm'
 const bind = (v, set) => (k) => (e) => set({ ...v, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value })
 
 function Fields({ v, on, children }) {
   return (
-    <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-4 lg:gap-y-3">
       <input value={v.title} onChange={on('title')} placeholder="Nova tarefa" aria-label="Título" className={`${field} min-w-0 flex-1 basis-60`} />
       <input value={v.desc} onChange={on('desc')} placeholder="Descrição (opcional)" aria-label="Descrição" className={`${field} min-w-0 flex-1 basis-60`} />
-      <label className="flex items-center gap-1.5 text-sm">
-        <input type="checkbox" checked={v.urgent} onChange={on('urgent')} className="accent-indigo-600" />
+      <label className="flex items-center gap-2 py-1 text-sm lg:gap-1.5 lg:py-0">
+        <input type="checkbox" checked={v.urgent} onChange={on('urgent')} className="size-5 accent-indigo-600 lg:size-4" />
         Urgente
       </label>
-      <label className="flex items-center gap-1.5 text-sm">
-        <input type="checkbox" checked={v.important} onChange={on('important')} className="accent-indigo-600" />
+      <label className="flex items-center gap-2 py-1 text-sm lg:gap-1.5 lg:py-0">
+        <input type="checkbox" checked={v.important} onChange={on('important')} className="size-5 accent-indigo-600 lg:size-4" />
         Importante
       </label>
       <input type="date" value={v.due} onChange={on('due')} aria-label="Data de entrega" className={`${field} text-slate-600`} />
@@ -59,19 +59,19 @@ export default function Matrix({ tasks, onChange }) {
     if (editing.title.trim()) patch(editing.id, { ...editing, title: editing.title.trim() })
     setEditing(null)
   }
-  const btn = 'rounded-md px-4 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500'
+  const btn = 'rounded-md px-5 py-3 text-sm font-medium lg:px-4 lg:py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500'
 
   return (
     <section className="lg:flex lg:h-full lg:min-h-0 lg:flex-col">
-      <form onSubmit={add} className="mb-5">
+      <form onSubmit={add} className="mb-6 lg:mb-5">
         <Fields v={form} on={bind(form, setForm)}>
           <button className={`${btn} bg-slate-900 text-slate-50 hover:bg-slate-700`}>Adicionar</button>
         </Fields>
       </form>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:min-h-0 lg:flex-1 lg:grid-rows-2">
+      <div className="grid gap-5 sm:grid-cols-2 lg:min-h-0 lg:flex-1 lg:grid-rows-2 lg:gap-4">
         {QUADS.map((q) => {
-          const list = tasks.filter((t) => t.urgent === q.u && t.important === q.i).sort((a, b) => a.done - b.done || byDue(a, b))
+          const list = tasks.filter((t) => t.urgent === q.u && t.important === q.i).sort(byDue)
           return (
             <div
               key={q.title}
@@ -83,7 +83,7 @@ export default function Matrix({ tasks, onChange }) {
                 if (id) patch(id, { urgent: q.u, important: q.i })
                 setOver(null)
               }}
-              className={`min-h-40 lg:min-h-0 lg:overflow-y-auto rounded-lg border border-t-2 border-slate-200 p-4 ${q.accent} ${over === q.title ? 'bg-indigo-50 dark:bg-indigo-500/10' : ''}`}
+              className={`min-h-40 lg:min-h-0 lg:overflow-y-auto rounded-lg border border-t-2 border-slate-200 p-5 lg:p-4 ${q.accent} ${over === q.title ? 'bg-indigo-50 dark:bg-indigo-500/10' : ''}`}
             >
               <h2 className="font-medium">{q.title}</h2>
               <p className="mb-2 text-xs text-slate-400">{q.hint}</p>
@@ -102,9 +102,9 @@ export default function Matrix({ tasks, onChange }) {
                       draggable
                       onDragStart={(e) => { e.dataTransfer.setData('text/plain', t.id); e.dataTransfer.effectAllowed = 'move' }}
                       onDragEnd={() => setOver(null)}
-                      className="flex cursor-grab items-start gap-2 py-2 text-sm"
+                      className="flex cursor-grab items-start gap-3 py-3 text-sm lg:gap-2 lg:py-2"
                     >
-                      <input type="checkbox" checked={t.done} onChange={() => patch(t.id, { done: !t.done })} aria-label={`Concluir ${t.title}`} className="mt-0.5 accent-indigo-600" />
+                      <input type="checkbox" checked={t.done} onChange={() => patch(t.id, { done: !t.done })} aria-label={`Concluir ${t.title}`} className="mt-0.5 size-5 accent-indigo-600 lg:size-4" />
                       <div
                         role="button"
                         tabIndex={0}
@@ -121,7 +121,7 @@ export default function Matrix({ tasks, onChange }) {
                           </p>
                         )}
                       </div>
-                      <button onClick={() => remove(t.id)} aria-label={`Excluir ${t.title}`} className="px-1 text-slate-300 hover:text-red-600 focus-visible:outline-2 focus-visible:outline-indigo-500">×</button>
+                      <button onClick={() => remove(t.id)} aria-label={`Excluir ${t.title}`} className="px-2 py-1 text-slate-300 lg:px-1 lg:py-0 hover:text-red-600 focus-visible:outline-2 focus-visible:outline-indigo-500">×</button>
                     </li>
                   ),
                 )}
