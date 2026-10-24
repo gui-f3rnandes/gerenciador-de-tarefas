@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { loadData, saveData } from './storage'
 import { supabase } from './supabase'
+import { pushState, enablePush, disablePush } from './push'
 import Matrix from './Matrix'
 import Calendar from './Calendar'
 import Notes from './Notes'
@@ -8,7 +9,31 @@ import Pendencias from './Pendencias'
 
 const TEMA = 'app-tarefas:tema'
 const STATUS = { saved: 'Salvo na nuvem', saving: 'Salvando…', error: 'Erro ao salvar' }
-const ghost = 'rounded-md px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-indigo-500'
+const ghostBase = 'rounded-md px-3 py-1.5 text-sm hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-indigo-500'
+const ghost = `${ghostBase} text-slate-600`
+const PUSH_MSG = {
+  denied: 'Lembretes bloqueados: libere as notificações deste site nas configurações do navegador.',
+  unsupported: 'Lembretes indisponíveis aqui. No iPhone, instale o app na tela inicial e abra por ele.',
+  error: 'Não foi possível alterar os lembretes. Tente de novo.',
+}
+const bell = (on) => (
+  <svg viewBox="0 0 24 24" width="20" height="20" fill={on ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+  </svg>
+)
+
+const icon = (children) => (
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    {children}
+  </svg>
+)
+const NAV = [
+  { id: 'tarefas', label: 'Tarefas', icon: icon(<><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /></>) },
+  { id: 'pendencias', label: 'Pendências', icon: icon(<><polyline points="22 12 16 12 14 15 10 15 8 12 2 12" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></>) },
+  { id: 'calendario', label: 'Calendário', icon: icon(<><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></>) },
+  { id: 'notas', label: 'Notas', icon: icon(<><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" /><polyline points="14 3 14 9 20 9" /><line x1="8" y1="13" x2="16" y2="13" /><line x1="8" y1="17" x2="14" y2="17" /></>) },
+]
 
 const icon = (children) => (
   <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -28,6 +53,25 @@ export default function Board({ userId }) {
   const [status, setStatus] = useState('saved')
   const [day, setDay] = useState(null)
   const [tab, setTab] = useState('tarefas') // página ativa no celular
+<<<<<<< Updated upstream
+=======
+  const [push, setPush] = useState('checking') // lembretes deste aparelho
+
+  useEffect(() => {
+    pushState().then((s) => {
+      setPush(s)
+      if (s === 'on') enablePush(userId).catch(() => {}) // garante que a inscrição está na nuvem
+    })
+  }, [userId])
+
+  const togglePush = async () => {
+    try {
+      setPush(push === 'on' ? await disablePush() : await enablePush(userId))
+    } catch {
+      setPush('error')
+    }
+  }
+>>>>>>> Stashed changes
   const [dark, setDark] = useState(() => document.documentElement.classList.contains('dark'))
   const stamp = useRef(null) // versão da nuvem que conhecemos
   const dirty = useRef(false) // alteração ainda não enviada
@@ -132,9 +176,23 @@ export default function Board({ userId }) {
         <header className="mb-6 flex items-center justify-between lg:mb-4">
           <h1 className="text-2xl font-semibold tracking-tight">Tarefas</h1>
           <div className="flex items-center gap-1">
-            <span aria-live="polite" className={`mr-2 text-xs ${status === 'error' ? 'text-red-600 dark:text-red-400' : 'text-slate-400'}`}>
+            <span aria-live="polite" className={`mr-2 hidden text-xs sm:inline ${status === 'error' ? 'text-red-600 dark:text-red-400' : 'text-slate-400'}`}>
               {STATUS[status]}
             </span>
+<<<<<<< Updated upstream
+=======
+            <span role="img" aria-label={STATUS[status]} title={STATUS[status]} className={`mr-2 h-2 w-2 rounded-full sm:hidden ${status === 'error' ? 'bg-red-500' : status === 'saving' ? 'bg-indigo-500' : 'bg-slate-300'}`} />
+            {['on', 'off', 'error'].includes(push) && (
+              <button
+                onClick={togglePush}
+                aria-label={push === 'on' ? 'Desativar lembretes neste aparelho' : 'Ativar lembretes neste aparelho'}
+                title={push === 'on' ? 'Lembretes ativos neste aparelho' : 'Ativar lembretes neste aparelho'}
+                className={`${ghostBase} ${push === 'on' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-600'}`}
+              >
+                {bell(push === 'on')}
+              </button>
+            )}
+>>>>>>> Stashed changes
             <button onClick={() => setDark(!dark)} className={ghost}>
               <span className="hidden sm:inline">Modo </span>
               <span className="capitalize sm:normal-case">{dark ? 'claro' : 'escuro'}</span>
@@ -142,6 +200,10 @@ export default function Board({ userId }) {
             <button onClick={sair} className={ghost}>Sair</button>
           </div>
         </header>
+<<<<<<< Updated upstream
+=======
+        {PUSH_MSG[push] && <p role="status" className="-mt-3 mb-5 text-xs text-slate-500 lg:-mt-2 lg:mb-4">{PUSH_MSG[push]}</p>}
+>>>>>>> Stashed changes
 
         <div className="grid gap-8 lg:min-h-0 lg:flex-1 lg:grid-cols-[minmax(0,1fr)_19rem_19rem] lg:grid-rows-1">
           <div className={`${show('tarefas')} lg:h-full lg:min-h-0`}>

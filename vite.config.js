@@ -10,6 +10,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: { importScripts: ['push-sw.js'] },
       includeAssets: ['apple-touch-icon.png'],
       manifest: {
         name: 'Tarefas',
